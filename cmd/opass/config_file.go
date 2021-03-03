@@ -12,7 +12,7 @@ import (
 type AccountCredentials struct {
 	signinAddress string
 	emailAddress  string
-	privateKey    string
+	secretKey     string
 }
 
 // SaveCredentials store 1Password sign in credentials to onfig file
@@ -34,8 +34,8 @@ func SaveCredentials(signinAddress string, emailAddress string, privateKey strin
 	return configFilePath
 }
 
-// PrintCredentials for debug
-func PrintCredentials() {
+// GetCredentials
+func GetCredentials() AccountCredentials {
 	cfg, err := ini.Load(configFilePath())
 
 	if err != nil {
@@ -43,9 +43,24 @@ func PrintCredentials() {
 		os.Exit(1)
 	}
 
-	fmt.Println("Account signin id:", cfg.Section("account").Key("signin_address").String())
-	fmt.Println("Account email address:", cfg.Section("account").Key("email_address").String())
-	fmt.Println("Account secret key:", cfg.Section("account").Key("secret_key").String())
+	return AccountCredentials{
+		signinAddress: cfg.Section("account").Key("signin_address").String(),
+		emailAddress:  cfg.Section("account").Key("email_address").String(),
+		secretKey:     cfg.Section("account").Key("secret_key").String(),
+	}
+}
+
+func SaveSessionToken(sessionToken string) {
+	configFilePath := configFilePath()
+
+	cfg, err := ini.Load(configFilePath)
+
+	if err != nil {
+		log.Fatal("Failed to read config file")
+	}
+
+	cfg.Section("session").Key("token").SetValue(sessionToken)
+	cfg.SaveTo(configFilePath)
 }
 
 func ensureConfigFile() {

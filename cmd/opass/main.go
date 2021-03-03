@@ -7,6 +7,9 @@ import (
 var cli struct {
 	Config struct {
 	} `cmd help:"Initiate 1Password credentials configuration."`
+
+	Signin struct {
+	} `cmd help:"Signin to 1Password."`
 }
 
 func main() {
@@ -15,5 +18,7 @@ func main() {
 	switch ctx.Command() {
 	case "config":
 		ConfigAccount()
+	case "signin":
+		SignInToAccount()
 	}
 }

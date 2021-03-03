@@ -9,15 +9,22 @@ func ConfigAccount() {
 	var emailAddress string
 	var privateKey string
 
-	fmt.Print("Sign in Address: \b")
+	fmt.Print("Sign in Address: ")
 	fmt.Scanln(&signinAddress)
 
-	fmt.Print("Email Address: \b")
+	fmt.Print("Email Address: ")
 	fmt.Scanln(&emailAddress)
 
-	fmt.Print("Private Key: \b")
+	fmt.Print("Private Key: ")
 	fmt.Scanln(&privateKey)
 
 	configFilePath := SaveCredentials(signinAddress, emailAddress, privateKey)
 	fmt.Printf("Config file created at %s", configFilePath)
+}
+
+func SignInToAccount() {
+	credentials := GetCredentials()
+	sessionToken := OPSignIn(credentials)
+	SaveSessionToken(sessionToken)
+	fmt.Println("Signed In Successfuly")
 }
