@@ -26,7 +26,6 @@ func SignInToAccount() {
 	credentials := GetCredentials()
 	sessionToken := OPSignIn(credentials)
 	SaveSessionToken(sessionToken)
-	fmt.Println("Signed In Successfuly")
 }
 
 func EnsureAccountSignedIn() {

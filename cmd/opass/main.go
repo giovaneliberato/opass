@@ -5,6 +5,8 @@ import (
 )
 
 var cli struct {
+	Logins struct {
+	} `cmd default help: List all logins`
 	Config struct {
 	} `cmd help:"Initiate 1Password credentials configuration."`
 
@@ -16,7 +18,7 @@ var cli struct {
 }
 
 func main() {
-	ctx := kong.Parse(&cli, kong.UsageOnError())
+	ctx := kong.Parse(&cli)
 
 	switch ctx.Command() {
 	case "config":
@@ -25,5 +27,7 @@ func main() {
 		SignInToAccount()
 	case "vaults":
 		ListVaults()
+	case "logins":
+		ListLogins()
 	}
 }

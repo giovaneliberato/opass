@@ -1,10 +1,22 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
 )
+
+type LoginItem []struct {
+	UUID      string `json:"uuid"`
+	VaultUUID string `json:"vaultUuid"`
+	Overview  struct {
+		Tags  []string `json:"tags"`
+		Title string   `json:"title"`
+	} `json:"overview,omitempty"`
+}
 
 func OPSignIn(credentials AccountCredentials) string {
 	cmd := exec.Command(
@@ -24,6 +36,30 @@ func OPSignIn(credentials AccountCredentials) string {
 	}
 
 	return strings.TrimSuffix(string(sessionToken), "\n")
+}
+
+func OPGetLoginItems(sessionToken string) LoginItem {
+	cmd := exec.Command(
+		"op",
+		"list",
+		"items",
+		"--session="+sessionToken)
+
+	items, err := cmd.Output()
+
+	if err != nil {
+		os.Exit(1)
+	}
+
+	res := LoginItem{}
+	err = json.Unmarshal(items, &res)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(string(items))
+	return res
 }
 
 func OPCheckAccountIsSignedIn(sessionToken string) error {
