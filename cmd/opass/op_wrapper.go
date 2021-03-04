@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -58,7 +57,6 @@ func OPGetLoginItems(sessionToken string) LoginItem {
 		os.Exit(1)
 	}
 
-	fmt.Println(string(items))
 	return res
 }
 

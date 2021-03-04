@@ -1,33 +1,39 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/alecthomas/kong"
 )
 
 var cli struct {
-	Logins struct {
-	} `cmd default help: List all logins`
+	LoginName struct {
+		LoginName string `arg`
+	} `arg hidden`
+	AllLogins struct {
+	} `cmd hidden default:1`
 	Config struct {
 	} `cmd help:"Initiate 1Password credentials configuration."`
 
 	Signin struct {
-	} `cmd help:"Signin to 1Password."`
+	} `cmd help:"Signin to 1Password using predefined credentials."`
 
 	Vaults struct {
-	} `cmd help:"List existing vaults"`
+	} `cmd help:"List account vaults."`
 }
 
 func main() {
 	ctx := kong.Parse(&cli)
-
 	switch ctx.Command() {
+	case "<login-name>":
+		fmt.Println("worked", ctx.Args[0])
+	case "all-logins":
+		ListLogins()
 	case "config":
 		ConfigAccount()
 	case "signin":
 		SignInToAccount()
 	case "vaults":
 		ListVaults()
-	case "logins":
-		ListLogins()
 	}
 }

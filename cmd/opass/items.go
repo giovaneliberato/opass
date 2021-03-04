@@ -14,7 +14,7 @@ func ListLogins() {
 	EnsureAccountSignedIn()
 	items := OPGetLoginItems(GetSessionToken())
 
-	loginItems := gotree.New("Logins")
+	loginItems := gotree.New("logins")
 
 	for _, item := range items {
 		loginItems.Add(item.Overview.Title)
