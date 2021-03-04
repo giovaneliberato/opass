@@ -18,8 +18,7 @@ func ConfigAccount() {
 	fmt.Print("Private Key: ")
 	fmt.Scanln(&privateKey)
 
-	configFilePath := SaveCredentials(signinAddress, emailAddress, privateKey)
-	fmt.Printf("Config file created at %s", configFilePath)
+	SaveCredentials(signinAddress, emailAddress, privateKey)
 }
 
 func SignInToAccount() {

@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type LoginItem []struct {
+type LoginItems []struct {
 	UUID      string `json:"uuid"`
 	VaultUUID string `json:"vaultUuid"`
 	Overview  struct {
@@ -37,7 +37,7 @@ func OPSignIn(credentials AccountCredentials) string {
 	return strings.TrimSuffix(string(sessionToken), "\n")
 }
 
-func OPGetLoginItems(sessionToken string) LoginItem {
+func OPGetLoginItems(sessionToken string) LoginItems {
 	cmd := exec.Command(
 		"op",
 		"list",
@@ -50,7 +50,7 @@ func OPGetLoginItems(sessionToken string) LoginItem {
 		os.Exit(1)
 	}
 
-	res := LoginItem{}
+	res := LoginItems{}
 	err = json.Unmarshal(items, &res)
 	if err != nil {
 		log.Fatal(err)

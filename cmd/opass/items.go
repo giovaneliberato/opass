@@ -13,6 +13,7 @@ func ListVaults() {
 func ListLogins() {
 	EnsureAccountSignedIn()
 	items := OPGetLoginItems(GetSessionToken())
+	CacheLoginItems(items)
 
 	loginItems := gotree.New("logins")
 
