@@ -28,3 +28,10 @@ func SignInToAccount() {
 	SaveSessionToken(sessionToken)
 	fmt.Println("Signed In Successfuly")
 }
+
+func EnsureAccountSignedIn() {
+	sessionToken := GetSessionToken()
+	if err := OPCheckAccountIsSignedIn(sessionToken); err != nil {
+		SignInToAccount()
+	}
+}

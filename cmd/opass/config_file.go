@@ -18,30 +18,19 @@ type AccountCredentials struct {
 // SaveCredentials store 1Password sign in credentials to onfig file
 func SaveCredentials(signinAddress string, emailAddress string, privateKey string) string {
 	ensureConfigFile()
-	configFilePath := configFilePath()
-
-	cfg, err := ini.Load(configFilePath)
-
-	if err != nil {
-		log.Fatal("Failed to read config file")
-	}
+	cfg := getConfigFile()
 
 	cfg.Section("account").Key("signin_address").SetValue(signinAddress)
 	cfg.Section("account").Key("email_address").SetValue(emailAddress)
 	cfg.Section("account").Key("secret_key").SetValue(privateKey)
 
-	cfg.SaveTo(configFilePath)
-	return configFilePath
+	cfg.SaveTo(configFilePath())
+	return configFilePath()
 }
 
 // GetCredentials
 func GetCredentials() AccountCredentials {
-	cfg, err := ini.Load(configFilePath())
-
-	if err != nil {
-		fmt.Println("Failed to read config file")
-		os.Exit(1)
-	}
+	cfg := getConfigFile()
 
 	return AccountCredentials{
 		signinAddress: cfg.Section("account").Key("signin_address").String(),
@@ -51,16 +40,15 @@ func GetCredentials() AccountCredentials {
 }
 
 func SaveSessionToken(sessionToken string) {
-	configFilePath := configFilePath()
-
-	cfg, err := ini.Load(configFilePath)
-
-	if err != nil {
-		log.Fatal("Failed to read config file")
-	}
+	cfg := getConfigFile()
 
 	cfg.Section("session").Key("token").SetValue(sessionToken)
-	cfg.SaveTo(configFilePath)
+	cfg.SaveTo(configFilePath())
+}
+
+func GetSessionToken() string {
+	cfg := getConfigFile()
+	return cfg.Section("session").Key("token").String()
 }
 
 func ensureConfigFile() {
@@ -72,6 +60,17 @@ func ensureConfigFile() {
 		}
 		file.Close()
 	}
+}
+
+func getConfigFile() *ini.File {
+	configFilePath := configFilePath()
+
+	cfg, err := ini.Load(configFilePath)
+
+	if err != nil {
+		log.Fatal("Failed to read config file")
+	}
+	return cfg
 }
 
 func configFilePath() string {

@@ -10,6 +10,9 @@ var cli struct {
 
 	Signin struct {
 	} `cmd help:"Signin to 1Password."`
+
+	Vaults struct {
+	} `cmd help:"List existing vaults"`
 }
 
 func main() {
@@ -20,5 +23,7 @@ func main() {
 		ConfigAccount()
 	case "signin":
 		SignInToAccount()
+	case "vaults":
+		ListVaults()
 	}
 }

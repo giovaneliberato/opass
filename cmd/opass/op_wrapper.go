@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -18,7 +17,6 @@ func OPSignIn(credentials AccountCredentials) string {
 
 	cmd.Stdin = os.Stdin
 
-	printPrefix()
 	sessionToken, err := cmd.Output()
 
 	if err != nil {
@@ -28,6 +26,14 @@ func OPSignIn(credentials AccountCredentials) string {
 	return strings.TrimSuffix(string(sessionToken), "\n")
 }
 
-func printPrefix() {
-	fmt.Print("[1Password CLI] ")
+func OPCheckAccountIsSignedIn(sessionToken string) error {
+	cmd := exec.Command(
+		"op",
+		"get",
+		"account",
+		"--session="+sessionToken)
+
+	_, err := cmd.Output()
+
+	return err
 }
