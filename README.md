@@ -2,7 +2,7 @@
 # OPASS - A Unix/Pass-like interface for the 1Password CLI.
 
 
-:warning:  `This projects has not been peer reviewed. Use at you own risk.`
+:warning:  `  This projects has not been peer reviewed. Use at you own risk.  `:warning: 
 
 
 
