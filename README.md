@@ -1,4 +1,5 @@
 
+![](opass_logo.png)
 # OPASS - A Unix/Pass-like interface for the 1Password CLI.
 
 
