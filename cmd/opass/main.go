@@ -9,7 +9,7 @@ var cli struct {
 	LoginName struct {
 		LoginName string `arg`
 	} `arg hidden`
-	AllLogins struct {
+	List struct {
 	} `cmd hidden default:1`
 	Config struct {
 	} `cmd help:"Initiate 1Password credentials configuration."`
@@ -26,8 +26,8 @@ func main() {
 	switch ctx.Command() {
 	case "<login-name>":
 		GetLoginByName(cli.LoginName.LoginName, cli.Copy)
-	case "all-logins":
-		ListLogins()
+	case "list":
+		ListTags()
 	case "config":
 		ConfigAccount()
 	case "signin":

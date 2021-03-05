@@ -57,7 +57,7 @@ func OPSignIn(credentials AccountCredentials) string {
 	sessionToken, err := cmd.Output()
 
 	if err != nil {
-		os.Exit(1)
+		log.Fatal("Could not sign in", err)
 	}
 
 	return strings.TrimSuffix(string(sessionToken), "\n")
@@ -92,7 +92,8 @@ func OPGetLoginItems(sessionToken string) LoginItems {
 		"op",
 		"list",
 		"items",
-		"--session="+sessionToken)
+		"--session="+sessionToken,
+		"--cache")
 
 	items, err := cmd.Output()
 
