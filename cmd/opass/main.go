@@ -5,6 +5,7 @@ import (
 )
 
 var cli struct {
+	Copy      bool `short:c help:"Copy password to clipboard."`
 	LoginName struct {
 		LoginName string `arg`
 	} `arg hidden`
@@ -24,7 +25,7 @@ func main() {
 	ctx := kong.Parse(&cli)
 	switch ctx.Command() {
 	case "<login-name>":
-		GetLoginByName(ctx.Args[0])
+		GetLoginByName(cli.LoginName.LoginName, cli.Copy)
 	case "all-logins":
 		ListLogins()
 	case "config":

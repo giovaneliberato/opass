@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/atotto/clipboard"
 	"github.com/disiqueira/gotree"
 )
 
@@ -12,7 +13,7 @@ func ListVaults() {
 	EnsureAccountSignedIn()
 }
 
-func GetLoginByName(name string) {
+func GetLoginByName(name string, copy bool) {
 	EnsureAccountSignedIn()
 
 	UUID, err := GetLoginUUID(name)
@@ -21,9 +22,15 @@ func GetLoginByName(name string) {
 	}
 
 	loginItem := OPGetLogin(UUID, GetSessionToken())
-	loginEncoded, _ := json.MarshalIndent(loginItem, "", "  ")
 
-	fmt.Println(string(loginEncoded))
+	if copy {
+		clipboard.WriteAll(loginItem.Password)
+		fmt.Println("Password copied to clipboard.")
+	} else {
+
+		loginEncoded, _ := json.MarshalIndent(loginItem, "", "  ")
+		fmt.Println(string(loginEncoded))
+	}
 }
 
 func ListLogins() {
