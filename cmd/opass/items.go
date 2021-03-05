@@ -1,13 +1,29 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/disiqueira/gotree"
 )
 
 func ListVaults() {
 	EnsureAccountSignedIn()
+}
+
+func GetLoginByName(name string) {
+	EnsureAccountSignedIn()
+
+	UUID, err := GetLoginUUID(name)
+	if err != nil {
+		log.Fatal("Could not find login " + name)
+	}
+
+	loginItem := OPGetLogin(UUID, GetSessionToken())
+	loginEncoded, _ := json.MarshalIndent(loginItem, "", "  ")
+
+	fmt.Println(string(loginEncoded))
 }
 
 func ListLogins() {

@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/alecthomas/kong"
 )
 
@@ -26,7 +24,7 @@ func main() {
 	ctx := kong.Parse(&cli)
 	switch ctx.Command() {
 	case "<login-name>":
-		fmt.Println("worked", ctx.Args[0])
+		GetLoginByName(ctx.Args[0])
 	case "all-logins":
 		ListLogins()
 	case "config":
