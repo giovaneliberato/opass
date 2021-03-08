@@ -31,6 +31,14 @@ func ListTags() {
 	CacheTags(itemsByTags)
 }
 
+func ListAllItems() {
+	EnsureAccountSignedIn()
+	items := OPGetItems(GetSessionToken())
+	itemsByTags := groupItemsByTag(items)
+
+	PrintMapTree(itemsByTags)
+}
+
 func FlushCachedItems() {
 	EnsureAccountSignedIn()
 	items := OPGetItems(GetSessionToken())

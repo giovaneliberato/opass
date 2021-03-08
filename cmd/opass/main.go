@@ -6,6 +6,7 @@ import (
 
 var cli struct {
 	Copy       bool `short:c help:"Copy password to clipboard."`
+	ListAll    bool `short:a help:"List all tags and."`
 	TagOrLogin struct {
 		TagOrLogin string `arg`
 	} `arg help:"If a Tag name is given, list all logins. If a Login is given, show details."`
@@ -21,7 +22,11 @@ func main() {
 	case "<tag-or-login>":
 		GetItem(cli.TagOrLogin.TagOrLogin, cli.Copy)
 	case "list":
-		ListTags()
+		if cli.ListAll {
+			ListAllItems()
+		} else {
+			ListTags()
+		}
 	case "config":
 		ConfigAccount()
 	case "signin":
