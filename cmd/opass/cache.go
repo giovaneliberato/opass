@@ -11,10 +11,11 @@ var cacheFileName string = os.Getenv("HOME") + "/.opass/cache"
 func GetItemUUID(itemName string) (string, error) {
 	cache := OpenIniFile(cacheFileName)
 
-	UUID := cache.Section("items").Key(itemName).String()
+	section := cache.Section("items")
+	UUID := section.Key(itemName).String()
 
 	if UUID == "" {
-		return UUID, errors.New("Key do not exist")
+		return "", errors.New("Item '" + itemName + "' not found")
 	}
 
 	return UUID, nil
@@ -48,5 +49,12 @@ func CacheItems(items Items) {
 		treeCache.Key(item.Overview.Title).SetValue(item.UUID)
 	}
 
+	cache.SaveTo(cacheFileName)
+}
+
+func ClearCache() {
+	cache := OpenIniFile(cacheFileName)
+	cache.DeleteSection("items")
+	cache.DeleteSection("tags")
 	cache.SaveTo(cacheFileName)
 }

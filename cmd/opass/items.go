@@ -13,32 +13,26 @@ import (
 
 func GetItem(lookupName string, copy bool) {
 	EnsureAccountSignedIn()
-	tag, itemName := getTagAndItemName(lookupName)
+	tag, itemName := splitTagAndItemName(lookupName)
 
 	if IsTag(tag) {
 		if itemName != "" {
-			getItemByName(itemName, copy)
+			getItemByName(lookupName, itemName, copy)
 		} else {
 			listItemsByTag(tag)
 		}
 	} else {
-		getItemByName(itemName, copy)
+		getItemByName(lookupName, itemName, copy)
 	}
 }
 
 func ListTags() {
 	EnsureAccountSignedIn()
 	items := OPGetItems(GetSessionToken())
+	itemsByTags := groupItemsByTag(items)
+	tags := getTags(itemsByTags)
 
 	root := gotree.New("1Password")
-	itemsByTags := itemsOrderedByTag(items)
-	tags := make([]string, 0, len(itemsByTags))
-
-	for t := range itemsByTags {
-		tags = append(tags, t)
-	}
-	sort.Strings(tags)
-
 	for _, tag := range tags {
 		root.Add(tag)
 	}
@@ -48,14 +42,25 @@ func ListTags() {
 	CacheTags(itemsByTags)
 }
 
-func listItemsByTag(tag string) {
+func FlushCachedItems() {
+	EnsureAccountSignedIn()
 	items := OPGetItems(GetSessionToken())
+	itemsByTags := groupItemsByTag(items)
 
-	root := gotree.New("1 Password")
+	ClearCache()
+	CacheItems(items)
+	CacheTags(itemsByTags)
+}
+
+func listItemsByTag(tag string) {
+	EnsureAccountSignedIn()
+	items := OPGetItems(GetSessionToken())
+	itemsByTag := groupItemsByTag(items)
+
+	root := gotree.New("1Password")
 	tagTree := gotree.New(tag)
 
-	itemsByTag := itemsOrderedByTag(items)
-
+	sort.Strings(itemsByTag[tag])
 	for _, item := range itemsByTag[tag] {
 		tagTree.Add(item)
 	}
@@ -64,10 +69,19 @@ func listItemsByTag(tag string) {
 	fmt.Println(root.Print())
 }
 
-func getItemByName(name string, copy bool) {
+func getTags(itemsByTags map[string][]string) []string {
+	tags := make([]string, 0, len(itemsByTags))
+	for t := range itemsByTags {
+		tags = append(tags, t)
+	}
+	sort.Strings(tags)
+	return tags
+}
+
+func getItemByName(fullName string, name string, copy bool) {
 	UUID, err := GetItemUUID(name)
 	if err != nil {
-		log.Fatal("Could not find item " + name)
+		log.Fatalln("Item '" + fullName + "' not found.")
 	}
 
 	loginItem := OPGetItemByUUID(UUID, GetSessionToken())
@@ -81,20 +95,20 @@ func getItemByName(name string, copy bool) {
 	}
 }
 
-func itemsOrderedByTag(items Items) map[string][]string {
-	tree := make(map[string][]string)
+func groupItemsByTag(items Items) map[string][]string {
+	itemsByTag := make(map[string][]string)
 	for _, item := range items {
 		if len(item.Overview.Tags) == 0 {
-			tree["untagged"] = append(tree["untagged"], item.Overview.Title)
+			itemsByTag["untagged"] = append(itemsByTag["untagged"], item.Overview.Title)
 		}
 		for _, tag := range item.Overview.Tags {
-			tree[tag] = append(tree[tag], item.Overview.Title)
+			itemsByTag[tag] = append(itemsByTag[tag], item.Overview.Title)
 		}
 	}
-	return tree
+	return itemsByTag
 }
 
-func getTagAndItemName(name string) (string, string) {
+func splitTagAndItemName(name string) (string, string) {
 	parts := strings.Split(name, "/")
 
 	if len(parts) == 1 {
