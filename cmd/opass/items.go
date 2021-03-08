@@ -79,8 +79,8 @@ func getTags(itemsByTags map[string][]string) []string {
 }
 
 func getItemByName(fullName string, name string, copy bool) {
-	UUID, err := GetItemUUID(name)
-	if err != nil {
+	UUID := GetItemUUID(name)
+	if UUID == "" {
 		log.Fatalln("Item '" + fullName + "' not found.")
 	}
 

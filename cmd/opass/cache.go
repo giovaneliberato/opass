@@ -1,24 +1,28 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"log"
 	"os"
 )
 
 var cacheFileName string = os.Getenv("HOME") + "/.opass/cache"
 
-func GetItemUUID(itemName string) (string, error) {
+func GetItemUUID(itemName string) string {
 	cache := OpenIniFile(cacheFileName)
 
-	section := cache.Section("items")
-	UUID := section.Key(itemName).String()
+	section, err := cache.GetSection("items")
 
-	if UUID == "" {
-		return "", errors.New("Item '" + itemName + "' not found")
+	if err != nil {
+		log.Fatalln("Internal cache file is corrupted. Try running 'opass flush'")
 	}
 
-	return UUID, nil
+	UUID := section.Key(itemName)
+	if UUID == nil {
+		return ""
+	}
+
+	return UUID.String()
 }
 
 func IsTag(name string) bool {
