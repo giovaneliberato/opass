@@ -52,11 +52,12 @@ func OPSignIn(credentials AccountCredentials) string {
 		"--raw")
 
 	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
 
 	sessionToken, err := cmd.Output()
 
 	if err != nil {
-		log.Fatal("Could not sign in", err)
+		os.Exit(1)
 	}
 
 	return strings.TrimSuffix(string(sessionToken), "\n")

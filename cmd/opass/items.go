@@ -37,6 +37,8 @@ func ListAllItems() {
 	itemsByTags := groupItemsByTag(items)
 
 	PrintMapTree(itemsByTags)
+	CacheItems(items)
+	CacheTags(itemsByTags)
 }
 
 func FlushCachedItems() {

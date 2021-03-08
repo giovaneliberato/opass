@@ -33,8 +33,16 @@ func PrintNestedTree(branchName string, nodes []string) {
 
 func PrintMapTree(tree map[string][]string) {
 	root := gotree.New("1Password")
+	branches := make([]string, 0)
 
-	for branchName, nodes := range tree {
+	for branchName := range tree {
+		branches = append(branches, branchName)
+	}
+
+	sort.Strings(branches)
+
+	for _, branchName := range branches {
+		nodes := tree[branchName]
 		branch := gotree.New(branchName)
 
 		sort.Strings(nodes)

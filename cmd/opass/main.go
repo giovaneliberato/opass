@@ -6,14 +6,14 @@ import (
 
 var cli struct {
 	Copy       bool `short:c help:"Copy password to clipboard."`
-	ListAll    bool `short:a help:"List all tags and."`
+	ListAll    bool `short:a help:"List all tags and items."`
 	TagOrLogin struct {
 		TagOrLogin string `arg`
-	} `arg help:"If a Tag name is given, list all logins. If a Login is given, show details."`
+	} `arg help:"If a Tag name is given, list all logins under that tag. If an Item name is given, show details."`
 	List   struct{} `cmd default:1 help:"List all tags of account."`
 	Config struct{} `cmd help:"Initiate 1Password credentials configuration."`
 	Signin struct{} `cmd help:"Signin to 1Password using predefined credentials."`
-	Flush  struct{} `cmd help:"Drop local list of items and sync with 1Password account."`
+	Flush  struct{} `cmd help:"Drop local list of items and sync with 1Password account. Useful after you update information on another device."`
 }
 
 func main() {
