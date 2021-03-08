@@ -11,31 +11,30 @@ import (
 	"github.com/disiqueira/gotree"
 )
 
-func GetItem(name string, copy bool) {
+func GetItem(lookupName string, copy bool) {
 	EnsureAccountSignedIn()
-	tag, loginName := getTagAndLogin(name)
+	tag, itemName := getTagAndItemName(lookupName)
 
 	if IsTag(tag) {
-		if loginName != "" {
-			getLoginByName(loginName, copy)
+		if itemName != "" {
+			getItemByName(itemName, copy)
 		} else {
 			listItemsByTag(tag)
 		}
-
 	} else {
-		getLoginByName(loginName, copy)
+		getItemByName(itemName, copy)
 	}
 }
 
 func ListTags() {
 	EnsureAccountSignedIn()
-	items := OPGetLoginItems(GetSessionToken())
+	items := OPGetItems(GetSessionToken())
 
 	root := gotree.New("1Password")
-	loginTree := loginsOrderedByTag(items)
-	tags := make([]string, 0, len(loginTree))
+	itemsByTags := itemsOrderedByTag(items)
+	tags := make([]string, 0, len(itemsByTags))
 
-	for t := range loginTree {
+	for t := range itemsByTags {
 		tags = append(tags, t)
 	}
 	sort.Strings(tags)
@@ -45,33 +44,33 @@ func ListTags() {
 	}
 	fmt.Println(root.Print())
 
-	CacheLoginItems(items)
-	CacheTags(loginTree)
+	CacheItems(items)
+	CacheTags(itemsByTags)
 }
 
 func listItemsByTag(tag string) {
-	items := OPGetLoginItems(GetSessionToken())
+	items := OPGetItems(GetSessionToken())
 
 	root := gotree.New("1 Password")
 	tagTree := gotree.New(tag)
 
-	loginsByTag := loginsOrderedByTag(items)
+	itemsByTag := itemsOrderedByTag(items)
 
-	for _, login := range loginsByTag[tag] {
-		tagTree.Add(login)
+	for _, item := range itemsByTag[tag] {
+		tagTree.Add(item)
 	}
 
 	root.AddTree(tagTree)
 	fmt.Println(root.Print())
 }
 
-func getLoginByName(name string, copy bool) {
-	UUID, err := GetLoginUUID(name)
+func getItemByName(name string, copy bool) {
+	UUID, err := GetItemUUID(name)
 	if err != nil {
-		log.Fatal("Could not find login " + name)
+		log.Fatal("Could not find item " + name)
 	}
 
-	loginItem := OPGetLogin(UUID, GetSessionToken())
+	loginItem := OPGetItemByUUID(UUID, GetSessionToken())
 
 	if copy {
 		clipboard.WriteAll(loginItem.Password)
@@ -82,7 +81,7 @@ func getLoginByName(name string, copy bool) {
 	}
 }
 
-func loginsOrderedByTag(items LoginItems) map[string][]string {
+func itemsOrderedByTag(items Items) map[string][]string {
 	tree := make(map[string][]string)
 	for _, item := range items {
 		if len(item.Overview.Tags) == 0 {
@@ -95,7 +94,7 @@ func loginsOrderedByTag(items LoginItems) map[string][]string {
 	return tree
 }
 
-func getTagAndLogin(name string) (string, string) {
+func getTagAndItemName(name string) (string, string) {
 	parts := strings.Split(name, "/")
 
 	if len(parts) == 1 {

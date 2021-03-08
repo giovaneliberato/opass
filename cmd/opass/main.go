@@ -12,6 +12,7 @@ var cli struct {
 	List   struct{} `cmd default:1 help:"List all tags of account."`
 	Config struct{} `cmd help:"Initiate 1Password credentials configuration."`
 	Signin struct{} `cmd help:"Signin to 1Password using predefined credentials."`
+	Resync struct{} `cmd help:"Re-sync locally cached items with 1Password account."`
 }
 
 func main() {

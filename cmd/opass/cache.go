@@ -8,10 +8,10 @@ import (
 
 var cacheFileName string = os.Getenv("HOME") + "/.opass/cache"
 
-func GetLoginUUID(itemName string) (string, error) {
+func GetItemUUID(itemName string) (string, error) {
 	cache := OpenIniFile(cacheFileName)
 
-	UUID := cache.Section("login-items").Key(itemName).String()
+	UUID := cache.Section("items").Key(itemName).String()
 
 	if UUID == "" {
 		return UUID, errors.New("Key do not exist")
@@ -39,12 +39,12 @@ func CacheTags(tags map[string][]string) {
 	cache.SaveTo(cacheFileName)
 }
 
-func CacheLoginItems(LoginItems LoginItems) {
+func CacheItems(items Items) {
 	cache := OpenIniFile(cacheFileName)
 
-	treeCache := cache.Section("login-items")
+	treeCache := cache.Section("items")
 
-	for _, item := range LoginItems {
+	for _, item := range items {
 		treeCache.Key(item.Overview.Title).SetValue(item.UUID)
 	}
 

@@ -9,16 +9,24 @@ import (
 	"time"
 )
 
-type LoginItems []struct {
-	UUID      string `json:"uuid"`
-	VaultUUID string `json:"vaultUuid"`
-	Overview  struct {
+type Items []struct {
+	UUID     string `json:"uuid"`
+	Overview struct {
 		Tags  []string `json:"tags"`
 		Title string   `json:"title"`
 	} `json:"overview,omitempty"`
 }
 
-type loginItemResponse struct {
+type Item struct {
+	Username    string
+	Password    string
+	URL         string
+	UpdatedAt   time.Time
+	ItemVersion int
+	Tags        []interface{}
+}
+
+type itemResponse struct {
 	Details struct {
 		Fields []struct {
 			Name  string `json:"name"`
@@ -32,15 +40,6 @@ type loginItemResponse struct {
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
 	ItemVersion int       `json:"itemVersion"`
-}
-
-type LoginItem struct {
-	Username    string
-	Password    string
-	URL         string
-	UpdatedAt   time.Time
-	ItemVersion int
-	Tags        []interface{}
 }
 
 func OPSignIn(credentials AccountCredentials) string {
@@ -63,12 +62,12 @@ func OPSignIn(credentials AccountCredentials) string {
 	return strings.TrimSuffix(string(sessionToken), "\n")
 }
 
-func OPGetLogin(loginUUID string, sessionToken string) LoginItem {
+func OPGetItemByUUID(itemUUID string, sessionToken string) Item {
 	cmd := exec.Command(
 		"op",
 		"get",
 		"item",
-		loginUUID,
+		itemUUID,
 		"--session="+sessionToken)
 
 	items, err := cmd.Output()
@@ -77,17 +76,17 @@ func OPGetLogin(loginUUID string, sessionToken string) LoginItem {
 		os.Exit(1)
 	}
 
-	res := loginItemResponse{}
+	res := itemResponse{}
 	err = json.Unmarshal(items, &res)
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
 	}
 
-	return convertLoginItem(res)
+	return convertResponseToItem(res)
 }
 
-func OPGetLoginItems(sessionToken string) LoginItems {
+func OPGetItems(sessionToken string) Items {
 	cmd := exec.Command(
 		"op",
 		"list",
@@ -101,7 +100,7 @@ func OPGetLoginItems(sessionToken string) LoginItems {
 		os.Exit(1)
 	}
 
-	res := LoginItems{}
+	res := Items{}
 	err = json.Unmarshal(items, &res)
 	if err != nil {
 		log.Fatal(err)
@@ -123,14 +122,14 @@ func OPCheckAccountIsSignedIn(sessionToken string) error {
 	return err
 }
 
-func convertLoginItem(res loginItemResponse) LoginItem {
+func convertResponseToItem(res itemResponse) Item {
 	userAndPassword := make(map[string]string)
 
 	for _, field := range res.Details.Fields {
 		userAndPassword[field.Name] = field.Value
 	}
 
-	return LoginItem{
+	return Item{
 		Username:    userAndPassword["username"],
 		Password:    userAndPassword["password"],
 		URL:         res.Overview.URL,
