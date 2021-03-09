@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
 
 	"github.com/atotto/clipboard"
+	"gopkg.in/yaml.v2"
 )
 
 func GetItem(lookupName string, copy bool) {
@@ -81,7 +81,8 @@ func getItemByName(fullName string, name string, copy bool) {
 		clipboard.WriteAll(loginItem.Password)
 		fmt.Println("Password copied to clipboard.")
 	} else {
-		loginEncoded, _ := json.MarshalIndent(loginItem, "", "  ")
+		loginEncoded, _ := yaml.Marshal(loginItem)
+		fmt.Println()
 		fmt.Println(string(loginEncoded))
 	}
 }
