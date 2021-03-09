@@ -2,9 +2,9 @@
 ![](opass_logo.png)
 # OPass - Improved 1Password CLI for unix/pass lovers.
 
-If you are a 1Password user but miss the good ol' `pass`, this is your tool!
+If you are a 1Password user but miss the good old `pass`, this is your tool!
 
-OPass mimichs the usability unix password store by grouping and organize 1Password items in pretty printed tree. Its goal is to allow users migrating to 1Password a smooth transition without learning (yet) another tool. 
+OPass wraps the official 1Password CLU and mimichs the usability of the unix password store by grouping and organize your items in pretty printed tree. Its goal is to allow users migrating to 1Password a smooth transition without learning (yet) another tool.
 
 To keep everything organized, OPass uses the tags defined in the items to as the sections.
 
