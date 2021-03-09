@@ -2,21 +2,25 @@
 ![](opass_logo.png)
 # OPass - Improved 1Password CLI for unix/pass lovers.
 
-OPass is a wrapper CLI over official 1Password CLI.
+If you are a 1Password user but miss the good ol' `pass`, this is your tool!
 
-Its usage is very much inspired in the unix password store which has a killer usability for terminal users.
+OPass mimichs the usability unix password store by grouping and organize 1Password items in pretty printed tree. Its goal is to allow users migrating to 1Password a smooth transition without learning (yet) another tool. 
 
-It aims to provide pass and 1Password users a familiar experience without learning (yet) another tool. 
+To keep everything organized, OPass uses the tags defined in the items to as the sections.
 
-Important
+
+> 
+Important ⚠️
 ```
-OPass do not manage any sensitive information itself (beside the private key, which is saved on $HOME/.opass/config).
-The sign in is handled direct by the 1Password CLI and your data is fetched from the server and displayed directly in the terminal. 
+This is a semi-cached tool. All the files are needed are inside $HOME/.opass/
 
-The only data kept is the items title and tags store under $HOME/.opass/config
+OPass makes a copy of your private key (for quick login) and the item's title and UUID.
+If you consider this as sensitive information please do not use this tool.
 
+The sign in is handled direct by the 1Password CLI and your data is fetched
+from the server and displayed directly in the terminal. 
 
-This projects has not been peer reviewed. Be sure you reviewed the code before using it.
+This projects has not been peer reviewed. Be sure youreviewed the code before using it.
 
 ```
 
@@ -53,11 +57,8 @@ Run "opass <command> --help" for more information on a command.
 ## Getting started
 
 #### List all tags
-
-OPass uses the tags defined in the items to organize the sections in the tree. Untagged items go under the sescion `untagged`.
-
 ```
-opass
+$ opass
 
 1Password
 └── finance
@@ -68,7 +69,7 @@ opass
 
 #### List logins of a tag 
 ```
-opass tech
+$ opass tech
 
 1 Password
 └── tech
@@ -79,13 +80,13 @@ opass tech
 
 #### Copy password to clipboard 
 ```
-opass -c tech/vpn
+$ opass -c tech/vpn
 Password copied to clipboard.
 ```
 
 #### Get logins details 
 ```
-opass tech/vpn
+$ opass tech/vpn
 
 username: giovane
 password: <password>
@@ -103,16 +104,22 @@ tags:
 
 2. Clone repo and compile
 ```
-git clone git@github.com:giovaneliberato/opass.git
-cd opass
-make install
+$ git clone git@github.com:giovaneliberato/opass.git
+$ cd opass
+$ make install
 ```
 3. Setup account
 ```
-opass config
+$ opass config
 Sign in Address: https://my.1password.com
 Email Address: me@example.com
 Private Key: <PRIVATE_KEY>
 Configuration file created at $HOME/.opass/config
 ```
-4. **You are good to go!**
+
+4. Enable autocompletion
+```
+$ source opass-completion.bash
+```
+
+5. **You are good to go! Try running `opass -a`**
