@@ -2,13 +2,24 @@
 ![](opass_logo.png)
 # OPass - Improved 1Password CLI for unix/pass lovers.
 
-OPass is a wrapper CLI over official 1Password CLI. Its usage is very much inspired in the unix password store which has a killer usability for terminal users.
+OPass is a wrapper CLI over official 1Password CLI.
+
+Its usage is very much inspired in the unix password store which has a killer usability for terminal users.
 
 It aims to provide pass and 1Password users a familiar experience without learning (yet) another tool. 
 
-Important note: OPass do not manage any sensitive information itself (beside the private key, which is saved on `$HOME/.opass/config`). The sign in is handled direct by the 1Password CLI and your data is fetched from the server and displayed directly in the terminal. 
+Important
+```
+OPass do not manage any sensitive information itself (beside the private key, which is saved on $HOME/.opass/config).
+The sign in is handled direct by the 1Password CLI and your data is fetched from the server and displayed directly in the terminal. 
 
-:warning:⠀⠀`This projects has not been peer reviewed. Use at you own risk.`⠀⠀:warning: 
+The only data kept is the items title and tags store under $HOME/.opass/config
+
+
+This projects has not been peer reviewed. Be sure you reviewed the code before using it.
+
+```
+
 
 
 ## Usage
@@ -75,16 +86,15 @@ Password copied to clipboard.
 #### Get logins details 
 ```
 opass tech/vpn
-{
-  "Username": "giovane",
-  "Password": "<password>",
-  "URL": "",
-  "UpdatedAt": "2020-01-12T18:07:46Z",
-  "ItemVersion": 2,
-  "Tags": [
-    "tech"
-  ]
-}
+
+username: giovane
+password: <password>
+url: server.vpn.com
+updatedat: 2021-03-08T14:15:51Z
+itemversion: 2
+tags:
+- tech
+
 ```
 
 ## Installing

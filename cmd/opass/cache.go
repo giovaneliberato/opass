@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 var cacheFileName string = os.Getenv("HOME") + "/.opass/cache"
@@ -38,7 +38,7 @@ func CacheTags(tags map[string][]string) {
 	treeCache := cache.Section("tags")
 
 	for tag, items := range tags {
-		treeCache.Key(tag).SetValue(fmt.Sprint(len(items)))
+		treeCache.Key(tag).SetValue(strings.Join(items, `,`))
 	}
 
 	cache.SaveTo(cacheFileName)
