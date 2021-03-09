@@ -10,7 +10,7 @@ To keep everything organized, OPass uses the tags defined in the items to as the
 
 
 > 
-Important ⚠️
+⚠️ ⠀**Important** 
 ```
 This is a semi-cached tool. All the files are needed are inside $HOME/.opass/
 
@@ -20,8 +20,7 @@ If you consider this as sensitive information please do not use this tool.
 The sign in is handled direct by the 1Password CLI and your data is fetched
 from the server and displayed directly in the terminal. 
 
-This projects has not been peer reviewed. Be sure youreviewed the code before using it.
-
+This projects has not been peer reviewed. Make sure your review the code before using it.
 ```
 
 
