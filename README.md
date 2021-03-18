@@ -4,7 +4,7 @@
 
 If you are a 1Password user but miss the good old `pass`, this is your tool!
 
-OPass wraps the official 1Password CLU and mimichs the usability of the unix password store by grouping and organize your items in pretty printed tree. Its goal is to allow users migrating to 1Password a smooth transition without learning (yet) another tool.
+OPass wraps the official 1Password CLI and mimichs the usability of the unix password store by grouping and organizing your items in pretty printed tree. Its goal is to allow users migrating to 1Password a smooth transition without learning (yet) another tool.
 
 To keep everything organized, OPass uses the tags defined in the items to as the sections.
 
@@ -12,7 +12,7 @@ To keep everything organized, OPass uses the tags defined in the items to as the
 > 
 ⚠️ ⠀**Important** 
 ```
-This is a semi-cached tool. All the files are needed are inside $HOME/.opass/
+This is a semi-cached tool. All the files needed are stored inside $HOME/.opass/
 
 OPass makes a copy of your private key (for quick login) and the item's title and UUID.
 If you consider this as sensitive information please do not use this tool.
